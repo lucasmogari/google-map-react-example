@@ -1,26 +1,27 @@
-import React, { PropTypes, Component } from 'react';
-import toPoints from './../functions/toPoints';
+import React from "react";
+import PropTypes from "prop-types";
+import toPoints from "../functions/toPoints";
 
-export default class Polyline extends Component {
-    static propTypes = {
-        coords: PropTypes.array,
-        ptCorner: PropTypes.object,
-        bounds: PropTypes.array,
-        zoom: PropTypes.number,
-        options: PropTypes.object
+const Polyline = ({ bounds, coords, options, ptCorner, zoom }) => {
+  ptCorner = ptCorner || toPoints(bounds[0], bounds[1], zoom);
+  const points = [];
+  for (let i = 0; i < coords.length; i++) {
+    const ptScreen = toPoints(coords[i].lat, coords[i].lng, zoom);
+    const point = {
+      x: ptScreen.x - ptCorner.x,
+      y: ptScreen.y - ptCorner.y
     };
+    points.push(point.x + "," + point.y);
+  }
+  return <polyline points={points.join(" ")} {...options} />;
+};
 
-    render() {
-        const ptCorner = this.props.ptCorner || toPoints(this.props.bounds[0], this.props.bounds[1], this.props.zoom);
-        const points = [];
-        for (var i = 0; i < this.props.coords.length; i++) {
-            const ptScreen = toPoints(this.props.coords[i].lat, this.props.coords[i].lng, this.props.zoom);
-            const point = {
-                x: ptScreen.x - ptCorner.x,
-                y: ptScreen.y - ptCorner.y
-            };
-            points.push(point.x + ',' + point.y);
-        }
-        return <polyline points={points.join(' ')} {...this.props.options}/>;
-    }
-}
+Polyline.propTypes = {
+  coords: PropTypes.array,
+  ptCorner: PropTypes.object,
+  bounds: PropTypes.array,
+  zoom: PropTypes.number,
+  options: PropTypes.object
+};
+
+export default Polyline;
