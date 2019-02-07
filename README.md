@@ -1,4 +1,9 @@
-# google-map-react-example
+# google-map-react polygon example
 Example of using google-map-react with polygons
 
-Run webpack and then open public/index.html.
+To run the example
+
+```sh
+yarn install
+yarn start
+```
